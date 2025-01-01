@@ -1,0 +1,80 @@
+(defwidget bar []
+  (centerbox :orientation "h"
+    (workspaces)
+    (center)
+    (sidestuff)
+))
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"
+            (box :class "other-icons-wrapper"
+            (image :class "sound" :icon volume-icon)
+            (image :class "keyboard" :icon "input-keyboard-symbolic")
+            )
+            (box :class "status-icons-wrapper"
+            (image :class "network" :icon "network-wired-symbolic")
+            (image :class "power" :icon "battery-full-symbolic")
+            )
+            (label :text time :class "clock-text")
+            (label :text day :class "day-text")
+            (box :class "notification-bell-wrapper" 
+            (image :class "notification-bell" :icon "notification-symbolic")
+            )   
+))
+
+
+
+(defwidget workspaces []
+  (box :class "workspaces"
+       :orientation "h"
+       :space-evenly true
+       :halign "start"
+       :spacing 10
+    
+    (literal :content windows_as_yuck)
+))
+
+(defwidget center []
+  (box 
+       :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :class "center-icons"
+
+    (image :class "desktops" :icon "preferences-system-windows-symbolic")   
+    (image :path "images/logo-rs.png")
+    (image :class "search" :icon "system-search-symbolic")))
+
+
+
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(defpoll volume-icon :interval "1s"
+  "scripts/get_sound_level.py"
+)
+
+(defpoll time :interval "1s"
+  "date +'%H:%M'")
+
+(defpoll day :interval "1s"
+  "date +'%a %j'")
+
+(defpoll windows :interval "1s"
+  "wlrctl toplevel list | awk -F: '{print $1}'")
+
+(defpoll windows_as_yuck :interval "1s"
+"scripts/generate_windows_yuck.py"
+)
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "10px"
+                      :anchor "bottom center")
+  :stacking "overlay"
+  :exclusive "true"
+  (bar))
