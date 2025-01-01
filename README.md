@@ -2,7 +2,15 @@
 
 This is a repo for MiracleOS's dotfiles. You can git clone them and symlink to your local config.
 
-Please note that only the sound icon, the hour and the application bar are dynamic for now.
+Things dynamic:
+
+* app list
+* sound icon
+* battery icon
+* ethernet icon
+* time
+
+Everything else isjus placeholders
 
 ## Needed software
 
@@ -13,6 +21,8 @@ Please note that only the sound icon, the hour and the application bar are dynam
 * swayidle
 * firefox
 * alacritty
+* python3.11
+* networkmanager
 
 ## Recommended software
 

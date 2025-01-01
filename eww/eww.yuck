@@ -12,8 +12,8 @@
             (image :class "keyboard" :icon "input-keyboard-symbolic")
             )
             (box :class "status-icons-wrapper"
-            (image :class "network" :icon "network-wired-symbolic")
-            (image :class "power" :icon "battery-full-symbolic")
+            (image :class "network" :icon network-icon)
+            (image :class "power" :icon battery-icon)
             )
             (label :text time :class "clock-text")
             (label :text day :class "day-text")
@@ -56,6 +56,14 @@
 
 (defpoll time :interval "1s"
   "date +'%H:%M'")
+
+(defpoll battery-icon :interval "1s"
+"scripts/get_battery_icon.sh"
+)
+
+(defpoll network-icon :interval "1s"
+"scripts/get_networking_icon.sh"
+)
 
 (defpoll day :interval "1s"
   "date +'%a %j'")
