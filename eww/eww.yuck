@@ -8,7 +8,7 @@
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"
             (box :class "other-icons-wrapper"
-            (image :class "sound" :icon volume-icon)
+            (button :onclick "pavucontrol" (image :class "sound" :icon volume-icon))
             (image :class "keyboard" :icon "input-keyboard-symbolic")
             )
             (box :class "status-icons-wrapper"
@@ -18,7 +18,7 @@
             (label :text time :class "clock-text")
             (label :text day :class "day-text")
             (box :class "notification-bell-wrapper" 
-            (image :class "notification-bell" :icon "notification-symbolic")
+            (image :class "notification-bell" :icon "preferences-system-notifications-symbolic")
             )   
 ))
 
@@ -42,7 +42,7 @@
        :class "center-icons"
 
     (image :class "desktops" :icon "preferences-system-windows-symbolic")   
-    (image :path "images/logo-rs.png")
+    (box :class "miracleos-icon-wrapper" (image :class "miracleos-icon" :path "images/logo-rs.png"))
     (image :class "search" :icon "system-search-symbolic")))
 
 

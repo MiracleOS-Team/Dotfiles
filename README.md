@@ -23,6 +23,7 @@ Everything else isjus placeholders
 * alacritty
 * python3.11
 * networkmanager
+* pavucontrol
 
 ## Recommended software
 
