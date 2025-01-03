@@ -10,7 +10,7 @@ Things dynamic:
 * ethernet icon
 * time
 
-Everything else isjus placeholders
+Everything else is just placeholders
 
 ## Needed software
 
