@@ -1,6 +1,7 @@
 #!/bin/python3.11
 import os
 import configparser
+import json
 
 def find_icon(icon_name, icon_size=None, icon_dirs=None, icon_extensions=None):
     """Search for an icon in standard directories with optional size preference."""
@@ -46,6 +47,36 @@ def parse_desktop_file(filepath):
         return config["Desktop Entry"]["Icon"]
     return None
 
+def save_to_app_cache(app_name, fallback_icon, icon_size, final_path):
+    try:
+        dt = json.load(open(os.path.join(os.getenv("HOME"), ".config/miracleos/app-icons.json"), "r"))
+
+        dt[f"{app_name}-{icon_size}-{fallback_icon}"] = final_path
+
+        json.dump(dt, open(os.path.join(os.getenv("HOME"), ".config/miracleos/app-icons.json"), "w"), indent=4)
+    except:
+        pass
+
+def get_cached_app(app_name, fallback_icon, icon_size):
+    try:
+        dt = json.load(open(os.path.join(os.getenv("HOME"), ".config/miracleos/app-icons.json"), "r"))
+        if f"{app_name}-{icon_size}-{fallback_icon}" in dt:
+            return dt[f"{app_name}-{icon_size}-{fallback_icon}"]
+        else:
+            return None
+    except:
+        return None
+
+def get_app_alias(app_name):
+    try:
+        dt = json.load(open(os.path.join(os.getenv("HOME"), ".config/miracleos/app-icons-alias.json"), "r"))
+        if app_name in dt:
+            return dt[app_name]
+        else:
+            return app_name
+    except:
+        return app_name
+
 def get_application_logo(app_name: str, fallback_icon: str = "application-x-executable", icon_size: int = 256) -> str:
     """
     Get the application logo from the system icon theme or desktop files.
@@ -55,9 +86,18 @@ def get_application_logo(app_name: str, fallback_icon: str = "application-x-exec
     :param icon_size: Preferred size of the icon (e.g., 48 for 48x48 icons).
     :return: Path to the application icon or the fallback icon.
     """
+
+    app_name = get_app_alias(app_name)
+
+    cached_app_icon = get_cached_app(app_name, fallback_icon, icon_size)
+    if cached_app_icon != None:
+        return cached_app_icon
+
+
     # Try to locate the icon directly in the current theme first
     icon_path = find_icon(app_name, icon_size=icon_size)
     if icon_path:
+        save_to_app_cache(app_name, fallback_icon, icon_size, icon_path)
         return icon_path
 
     # Search in .desktop files if the icon is not found in the theme
@@ -74,10 +114,13 @@ def get_application_logo(app_name: str, fallback_icon: str = "application-x-exec
             if icon_name:
                 icon_path = find_icon(icon_name, icon_size=icon_size)
                 if icon_path:
+                    save_to_app_cache(app_name, fallback_icon, icon_size, icon_path)
                     return icon_path
 
     # Fallback to a default icon
     if not app_name.islower():
-        return get_application_logo(app_name=app_name.lower(), fallback_icon=fallback_icon, icon_size=icon_size)
+        icon_path = get_application_logo(app_name=app_name.lower(), fallback_icon=fallback_icon, icon_size=icon_size)
+        return icon_path
     fallback_path = find_icon(fallback_icon, icon_size=icon_size)
-    return fallback_path if fallback_path else ""
+    save_to_app_cache(app_name, fallback_icon, icon_size, fallback_path)
+    return fallback_path

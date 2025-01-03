@@ -17,7 +17,7 @@ swaybg -i /home/administrateur/.config/labwc/wallpaper >/dev/null 2>&1 &
 # as mako to function correctly. Thunderbird is an example of this.
 
 
-eww daemon
+eww daemon &
 eww open bar
 
 # Lock screen after 5 minutes; turn off display after another 5 minutes.
