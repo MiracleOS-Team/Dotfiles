@@ -1,0 +1,55 @@
+(defwidget nb_main []
+  
+  (box :orientation "vertical"
+       :halign "center"
+       :space-evenly false
+    
+        (label :text "${notification_count} Notifications" :class "h1" :xalign 0)
+
+        (for notif in notifications_list
+           (literal :content notif)
+        )
+    
+
+      )
+  
+  )
+
+(defwidget notification [app summary app_image ?body ?actions_yuck urgency ?desktop ?image time]
+  (box :orientation "vertical" :class "ntf_main_div" :space-evenly false
+    (box :class "ntf_top_bar" :space-evenly false
+    (image :path app_image :image-height 25)
+    (label :text app)
+    )
+    (box  :space-evenly false :halign "left"
+     (expander :expanded {image == "" ? false : true} (image :path image :image-width 75 :class "ntf_main_image"))
+     (box :class "ntf_text_contents" :orientation "vertical" :space-evenly false
+      (label :text summary :justify "left" :class "h2" :wrap true :xalign 0)
+      (expander :expanded {body == "" ? false : true} (label :wrap true :markup body :xalign 0))
+      
+      (label :text time :class "h4" :xalign 0)
+     )   
+    )
+    (literal :content actions_yuck)
+    
+    ))
+
+(defpoll notifications_list :interval "1s"
+"cat ~/.config/miracleos/eww_notifications.json"
+)
+
+(defpoll notification_count :interval "1s"
+"cat ~/.config/miracleos/notification_count")
+
+(defwindow notification_bar
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "15%"
+                      :height "10px"
+                      :anchor "bottom right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable "ondemand"
+  (nb_main)
+)

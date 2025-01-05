@@ -9,6 +9,7 @@ Things dynamic:
 * battery icon
 * ethernet icon
 * time
+* notifications
 
 Everything else is just placeholders
 
@@ -24,6 +25,7 @@ Everything else is just placeholders
 * python3.11
 * networkmanager
 * pavucontrol
+* MiracleOS's notification daemon (will crash if not installed)
 
 ## Recommended software
 

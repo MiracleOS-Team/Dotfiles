@@ -1,5 +1,7 @@
 {
     "virtualbox manager": "virtualbox",
     "virtualbox machine": "virtualbox",
-    "jetbrains-pycharm-ce": "pycharm"
+    "virtualboxvm": "virtualbox",
+    "jetbrains-pycharm-ce": "pycharm",
+    "jetbrains-writerside": "writerside"
 }
