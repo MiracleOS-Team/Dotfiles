@@ -26,6 +26,7 @@ Everything else is just placeholders
 * networkmanager
 * pavucontrol
 * MiracleOS's notification daemon (will crash if not installed)
+* inotify-tools
 
 ## Recommended software
 
@@ -34,3 +35,20 @@ Everything else is just placeholders
 ## Needed modifications
 
 modify XKB_DEFAULT_lAYOUT in labwc/environment to your keyboard layout
+
+## Specifications
+### Fully compatible
+
+- https://specifications.freedesktop.org/notification-spec/latest/
+
+### Partially compatible (or bad implementation)
+
+- https://specifications.freedesktop.org/basedir-spec/latest/
+- https://specifications.freedesktop.org/desktop-entry-spec/latest/
+- https://specifications.freedesktop.org/icon-theme-spec/latest/
+
+
+### Soon compatible
+
+- https://specifications.freedesktop.org/autostart-spec/latest/
+- https://specifications.freedesktop.org/menu-spec/latest/

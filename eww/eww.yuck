@@ -10,10 +10,11 @@
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"
             (box :class "other-icons-wrapper"
-            (button :onclick "pavucontrol" (image :class "sound" :icon volume-icon))
+            
             (image :class "keyboard" :icon "input-keyboard-symbolic")
             )
             (box :class "status-icons-wrapper"
+            (button :onclick "pavucontrol" (image :class "sound" :icon volume-icon))
             (image :class "network" :icon network-icon)
             (image :class "power" :icon battery-icon)
             )
@@ -21,8 +22,12 @@
             (label :text day :class "day-text")
             (button :onclick "scripts/toggle_widget.sh notification_bar"
             (box :class "notification-bell-wrapper" 
-            (expander :expanded {notification_count == 0} (image :class "notification-bell" :icon "preferences-system-notifications-symbolic"))
-            (expander :expanded {notification_count == 0 ? false : true} (label :text notification_count :class "notification-count"))
+            (stack :selected {notification_count == 0 ? 0 : 1} :same-size true :transition {notification_count == 0 ? "slideleft" : "slideright"}
+              (image :class "notification-bell" :icon "preferences-system-notifications-symbolic")
+              (label :text notification_count :class "h2")
+            )
+            
+            
             )   
             )
             
@@ -53,8 +58,6 @@
 
 
 
-(deflisten music :initial ""
-  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
 
 (defpoll volume-icon :interval "1s"
   "scripts/get_sound_level.py"
@@ -81,6 +84,7 @@
 "scripts/generate_windows_yuck.py"
 )
 
+(deflisten null "cat /dev/null")
 
 
 (defwindow bar

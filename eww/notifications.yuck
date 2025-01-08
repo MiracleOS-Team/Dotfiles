@@ -1,27 +1,60 @@
 (defwidget nb_main []
-  
-  (box :orientation "vertical"
+  (revealer :reveal true :transition "slideup"
+    (box :orientation "vertical"
        :halign "center"
        :space-evenly false
     
-        (label :text "${notification_count} Notifications" :class "h1" :xalign 0)
-
-        (for notif in notifications_list
-           (literal :content notif)
+        (box :orientation "horizontal" 
+          (label :text "${notification_count} Notifications" :class "h1" :xalign 0)
+          (box :halign "end"
+            (button :onclick "dbus-send --session --dest=org.freedesktop.Notifications --type=method_call --print-reply /org/freedesktop/Notifications org.freedesktop.Notifications.CloseNotification uint32:-1 && eww close notification_bar" (label :class "button" :text "Clear all"))
+          )
+          
         )
-    
+        
+        
+          (for notif in notifications_list
+            (literal :content notif)
+          )
+        
+        
 
+
+        
       )
+  )
+  
   
   )
 
-(defwidget notification [app summary app_image ?body ?actions_yuck urgency ?desktop ?image time]
+(defwidget nb_modal []
+  (box  :halign "center"
+        :space-evenly false
+        :orientation "vertical"
+        
+        
+        (literal :content last_notification)
+        
+        
+          
+
+        
+
+  )
+)
+
+(defwidget notification [app summary app_image ?body ?actions_yuck urgency ?desktop ?image time id ?truncate]
   (box :orientation "vertical" :class "ntf_main_div" :space-evenly false
-    (box :class "ntf_top_bar" :space-evenly false
-    (image :path app_image :image-height 25)
-    (label :text app)
+    (box :class "ntf_top_bar" 
+      (box :class "ntf_topbar_text" :space-evenly false
+        (image :path app_image :image-height 25)
+        (label :text app)
+      )
+      (box :halign "end"
+        (button :onclick "dbus-send --session --dest=org.freedesktop.Notifications --type=method_call --print-reply /org/freedesktop/Notifications org.freedesktop.Notifications.CloseNotification uint32:${id}" :class "button" (label :text "Close"))
+      )
     )
-    (box  :space-evenly false :halign "left"
+    (box  :space-evenly false :halign "start"
      (expander :expanded {image == "" ? false : true} (image :path image :image-width 75 :class "ntf_main_image"))
      (box :class "ntf_text_contents" :orientation "vertical" :space-evenly false
       (label :text summary :justify "left" :class "h2" :wrap true :xalign 0)
@@ -34,22 +67,40 @@
     
     ))
 
-(defpoll notifications_list :interval "1s"
-"cat ~/.config/miracleos/eww_notifications.json"
+
+(deflisten notifications_list :initial "[]"
+"scripts/print_on_change.sh ~/.config/miracleos/eww_notifications.json"
 )
 
-(defpoll notification_count :interval "1s"
-"cat ~/.config/miracleos/notification_count")
+(deflisten notification_count :initial "0"
+"scripts/print_on_change.sh ~/.config/miracleos/notification_count"
+)
+
+(deflisten last_notification :initial "''"
+"scripts/print_last_item_on_change.sh ~/.config/miracleos/eww_notifications.json"
+)
+
+
+
 
 (defwindow notification_bar
   :monitor 0
   :geometry (geometry :x "0%"
                       :y "0%"
-                      :width "15%"
-                      :height "10px"
                       :anchor "bottom right")
   :stacking "overlay"
   :exclusive false
   :focusable "ondemand"
   (nb_main)
+)
+
+(defwindow notification_modal
+  :monitor 0
+  :geometry (geometry :x "15px"
+                      :y "30px"
+                      :anchor "bottom right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable "ondemand"
+  (nb_modal)
 )
