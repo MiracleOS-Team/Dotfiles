@@ -1,7 +1,6 @@
 # Example autostart file
 
 # Set background color.
-swaybg -i /home/administrateur/.config/labwc/wallpaper >/dev/null 2>&1 &
 
 # Configure output directives such as mode, position, scale and transform.
 # Use wlr-randr to get your output names
@@ -15,10 +14,6 @@ swaybg -i /home/administrateur/.config/labwc/wallpaper >/dev/null 2>&1 &
 # Enable notifications. Typically GNOME/KDE application notifications go
 # through the org.freedesktop.Notifications D-Bus API and require a client such
 # as mako to function correctly. Thunderbird is an example of this.
-
-
-eww daemon &
-eww open bar
 
 # Lock screen after 5 minutes; turn off display after another 5 minutes.
 #
